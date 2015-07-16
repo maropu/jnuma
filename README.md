@@ -1,7 +1,9 @@
+[![Build Status](https://travis-ci.org/maropu/jnuma.svg?branch=master)](https://travis-ci.org/maropu/jnuma)
+
 jnuma
 =========
 
-A Java library for accessing NUMA (Non Uniform Memory Access) API. 
+A Java library for accessing NUMA (Non Uniform Memory Access) API.
 
 ## Usage 
 
