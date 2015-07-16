@@ -1,4 +1,4 @@
-addSbtPlugin("org.xerial.sbt" % "sbt-pack" % "0.1.1")
+addSbtPlugin("org.xerial.sbt" % "sbt-pack" % "0.7.4")
 
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.1.0")
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
 
