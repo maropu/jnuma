@@ -45,8 +45,6 @@ object Build extends sbt.Build {
         crossPaths := false,
         libraryDependencies ++= Seq(
           // Add dependent jars here
-          "org.xerial" % "xerial-core" % "3.4.0" % "test",
-          "org.scalatest" %% "scalatest" % "2.2.5" % "test"
         ),
         javacOptions in Compile := defaultJavacOptions ++ Seq("-target", "1.6"),
         javacOptions in Compile in doc := defaultJavacOptions ++ Seq("-windowtitle", "xerial.jnuma API", "-linkoffline", "http://docs.oracle.com/javase/6/docs/api/", "http://docs.oracle.com/javase/6/docs/api/"),
