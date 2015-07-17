@@ -19,7 +19,7 @@ Currenty jnuma supports 64-bit Linux only. For the other operating systems, stan
 
 ## Requirements
 
-* libnuma (install by `yum numactl-devel`)
+* libnuma (2.0 or higher)
 * gcc (glibc 2.5 or higher)
 * jdk (1.5 or higher)
 
