@@ -19,9 +19,7 @@ package xerial.jnuma;
 import java.nio.ByteBuffer;
 
 /**
- * NUMA API Interface. This interface is used when loading native class in the root class loader, so you are not allowed to use
- * this class. If you describe this class in an import statement or source codes, loading the native class ({@link xerial.jnuma.Numa}) will fail.
- * @author leo
+ * NUMA API Interface.
  */
 public interface NumaInterface {
 
@@ -42,9 +40,8 @@ public interface NumaInterface {
 
     public void toNodeMemory(Object array, int length, int node);
 
-    //public void bind(long[] nodeMask);
-
     public ByteBuffer alloc(int capacity);
+
     /**
      * Allocate a new ByteBuffer on local NUMA node
      * @param capacity
@@ -60,7 +57,6 @@ public interface NumaInterface {
      */
     public ByteBuffer allocOnNode(int capacity, int node);
     public ByteBuffer allocInterleaved(int capacity);
-
 
     /**
      * Allocate a new memory of the size of the given capacity.
@@ -80,5 +76,4 @@ public interface NumaInterface {
      * @param buf
      */
     public void free(ByteBuffer buf);
-
 }

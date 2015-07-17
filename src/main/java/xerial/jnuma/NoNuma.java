@@ -20,14 +20,14 @@ import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 
 /**
- * A stub when accessing numa API is not supported in the system
+ * A stub when accessing numa API is not supported in the system.
  * @author leo
  */
 public class NoNuma implements NumaInterface {
 
     private sun.misc.Unsafe unsafe;
 
-    NoNuma() {
+    public NoNuma() {
         try {
             Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
             f.setAccessible(true);
@@ -38,7 +38,7 @@ public class NoNuma implements NumaInterface {
         }
     }
 
-
+    @Override
     public boolean isAvailable() {
         return false;
     }
@@ -93,7 +93,6 @@ public class NoNuma implements NumaInterface {
         return ByteBuffer.allocate(capacity);
     }
 
-
     public ByteBuffer allocLocal(int capacity) {
         return alloc(capacity);
     }
@@ -119,7 +118,7 @@ public class NoNuma implements NumaInterface {
 
     @Override
     public void free(ByteBuffer buf) {
-        // Simply clear the buffer and let the GC collect the freed memory
+        // Simply clear the buffer and let the GC collect the freed memory.
         buf.clear();
     }
 }

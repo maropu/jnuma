@@ -19,8 +19,9 @@ package xerial.jnuma;
 import java.nio.ByteBuffer;
 
 /**
- * Native code interface. Do not describe this class name in an import statement or source codes, because it will break
- * the native code loading mechanism. Use static methods in {@link xerial.jnuma.Numa} to access NUMA.
+ * Native code interface. Do not describe this class name in an import statement
+ * or source codes, because it will break the native code loading mechanism.
+ * Use static methods in {@link xerial.jnuma.Numa} to access NUMA.
  *
  * @author Taro L. Saito
  */
@@ -50,10 +51,7 @@ public class NumaNative implements NumaInterface {
     public native long allocMemory(long capacity);
     public native void free(long address, long capacity);
 
-
     private void throwError(int errorCode) throws Exception {
         throw new Exception(String.format("NUMA error occurred %d", errorCode));
     }
-
 }
-
