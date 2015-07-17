@@ -19,7 +19,7 @@ $(TARGET)/lib/NumaNative.o: $(CPP_SRC)/NumaNative.c
 	$(CC) -O2 -fPIC -m64 -I include -I $(CPP_SRC) -c $< -o $@
 
 $(TARGET)/lib/libjnuma.so : $(TARGET)/lib/NumaNative.o
-	$(CC) -O2 -fPIC -m64  -L/usr/lib64 -lnuma -o $@ $+  -shared -static-libgcc
+	$(CC) -O2 -shared -static-libgcc -fPIC -fvisibility=hidden -m64 -L/usr/lib64 -lnuma -o $@ $+
 	strip $@
 
 src/main/resources/xerial/jnuma/native/linux/x86_64/libjnuma.so : $(TARGET)/lib/libjnuma.so
