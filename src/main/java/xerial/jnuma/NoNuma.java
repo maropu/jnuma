@@ -74,13 +74,13 @@ public class NoNuma implements NumaInterface {
     }
 
     @Override
-    public int preferredNode() {
-        return 0;
+    public void runOnNode(int node) {
+        // do nothing
     }
 
     @Override
-    public void setLocalAlloc() {
-        // do nothing
+    public int preferredNode() {
+        return 0;
     }
 
     @Override
@@ -89,31 +89,8 @@ public class NoNuma implements NumaInterface {
     }
 
     @Override
-    public void runOnNode(int node) {
+    public void setLocalAlloc() {
         // do nothing
-    }
-
-    @Override
-    public void toNodeMemory(Object array, int length, int node) {
-        // do nothing
-    }
-
-    @Override
-    public ByteBuffer alloc(int capacity) {
-        return ByteBuffer.allocate(capacity);
-    }
-
-    public ByteBuffer allocLocal(int capacity) {
-        return alloc(capacity);
-    }
-
-    public ByteBuffer allocOnNode(int capacity, int node) {
-        return allocLocal(capacity);
-    }
-
-    @Override
-    public ByteBuffer allocInterleaved(int capacity) {
-        return allocLocal(capacity);
     }
 
     @Override
@@ -127,8 +104,32 @@ public class NoNuma implements NumaInterface {
     }
 
     @Override
+    public ByteBuffer alloc(int capacity) {
+        return ByteBuffer.allocate(capacity);
+    }
+
+    @Override
+    public ByteBuffer allocLocal(int capacity) {
+        return alloc(capacity);
+    }
+
+    public ByteBuffer allocOnNode(int capacity, int node) {
+        return allocLocal(capacity);
+    }
+
+    @Override
+    public ByteBuffer allocInterleaved(int capacity) {
+        return allocLocal(capacity);
+    }
+
+   @Override
     public void free(ByteBuffer buf) {
         // Simply clear the buffer and let the GC collect the freed memory.
         buf.clear();
+    }
+
+    @Override
+    public void toNodeMemory(Object array, int length, int node) {
+        // do nothing
     }
 }

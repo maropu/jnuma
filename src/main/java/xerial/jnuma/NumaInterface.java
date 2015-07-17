@@ -18,62 +18,42 @@ package xerial.jnuma;
 
 import java.nio.ByteBuffer;
 
-/**
- * NUMA API Interface.
- */
+/** NUMA API Interface. */
 public interface NumaInterface {
 
+    // Check if NUMA aviable
     public boolean isAvailable();
 
+    // Return # of NUMA nodes
     public int maxNode();
 
+    // Return the amount of total and free memory
+    // in a given node
     public long nodeSize(int node);
-
     public long freeSize(int node);
 
+    // Return penalty cost between nodes
     public int distance(int node1, int node2);
-    public int preferredNode();
-    public void setLocalAlloc();
 
-    public void setPreferred(int node);
+    // Run this thread in a given node
     public void runOnNode(int node);
 
-    public void toNodeMemory(Object array, int length, int node);
+    // Operate on preferred properties
+    public int preferredNode();
+    public void setPreferred(int node);
+    public void setLocalAlloc();
 
-    public ByteBuffer alloc(int capacity);
-
-    /**
-     * Allocate a new ByteBuffer on local NUMA node
-     * @param capacity
-     * @return
-     */
-    public ByteBuffer allocLocal(int capacity);
-
-    /**
-     * Allocate a new ByteBuffer on the specified NUMA node
-     * @param capacity
-     * @param node
-     * @return
-     */
-    public ByteBuffer allocOnNode(int capacity, int node);
-    public ByteBuffer allocInterleaved(int capacity);
-
-    /**
-     * Allocate a new memory of the size of the given capacity.
-     * @param capacity
-     * @return the allocated memory address
-     */
+    // Allocate and free raw memory
     public long allocMemory(long capacity);
-
-    /**
-     * Free the allocated memory
-     * @param address
-     */
     public void free(long address, long capacity);
 
-    /**
-     * Release the numa buffer
-     * @param buf
-     */
+    // Helper functions to allocate and free ByteBuffer
+    public ByteBuffer alloc(int capacity);
+    public ByteBuffer allocLocal(int capacity);
+    public ByteBuffer allocOnNode(int capacity, int node);
+    public ByteBuffer allocInterleaved(int capacity);
     public void free(ByteBuffer buf);
+
+    // Move a given memory range into the node
+    public void toNodeMemory(Object array, int length, int node);
 }

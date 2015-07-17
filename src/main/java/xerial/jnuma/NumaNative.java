@@ -27,29 +27,24 @@ import java.nio.ByteBuffer;
  */
 public class NumaNative implements NumaInterface {
 
-    public native boolean isAvailable();
-    public native int maxNode();
-    public native long nodeSize(int node);
-    public native long freeSize(int node);
-    public native int distance(int node1, int node2);
-
-    public native int preferredNode();
-    public native void setLocalAlloc();
-
-    public native void setPreferred(int node);
-    public native void runOnNode(int node);
-
-    public native void toNodeMemory(Object array, int length, int node);
-
-    public native ByteBuffer alloc(int capacity);
-    public native ByteBuffer allocLocal(int capacity);
-    public native ByteBuffer allocOnNode(int capacity, int node);
-    public native ByteBuffer allocInterleaved(int capacity);
-
-    public native void free(ByteBuffer buf);
-
-    public native long allocMemory(long capacity);
-    public native void free(long address, long capacity);
+    // The functions below are correspoinding to those in NumaNative.c
+    @Override public native boolean isAvailable();
+    @Override public native int maxNode();
+    @Override public native long nodeSize(int node);
+    @Override public native long freeSize(int node);
+    @Override public native int distance(int node1, int node2);
+    @Override public native void runOnNode(int node);
+    @Override public native int preferredNode();
+    @Override public native void setPreferred(int node);
+    @Override public native void setLocalAlloc();
+    @Override public native long allocMemory(long capacity);
+    @Override public native void free(long address, long capacity);
+    @Override public native ByteBuffer alloc(int capacity);
+    @Override public native ByteBuffer allocLocal(int capacity);
+    @Override public native ByteBuffer allocOnNode(int capacity, int node);
+    @Override public native ByteBuffer allocInterleaved(int capacity);
+    @Override public native void free(ByteBuffer buf);
+    @Override public native void toNodeMemory(Object array, int length, int node);
 
     // Used in a native code
     private void throwError(int errorCode) throws Exception {

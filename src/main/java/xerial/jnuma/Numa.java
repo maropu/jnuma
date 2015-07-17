@@ -35,7 +35,6 @@ public class Numa extends Logging {
     // The NUMA API implementation
     private static NumaInterface impl = null;
 
-
     static {
         if (OSInfo.getOSName().equals("linux")
                 && OSInfo.getArchName().equals("x86_64")) {
@@ -64,6 +63,14 @@ public class Numa extends Logging {
      */
     public static int numNodes() {
         return impl.maxNode() + 1;
+    }
+
+    /**
+     * Get the number of CPUs available to this machine.
+     * @return
+     */
+    public static int numCPUs() {
+        return Runtime.getRuntime().availableProcessors();
     }
 
     /**
@@ -96,36 +103,11 @@ public class Numa extends Logging {
     }
 
     /**
-     * Get the number of CPUs available to this machine.
-     * @return
-     */
-    public static int numCPUs() {
-        return Runtime.getRuntime().availableProcessors();
-    }
-
-    /**
-     * Create a bit mask for specifying CPU sets.
-     * From the LSB, it corresponds CPU0, CPU1, ...
-     * @return
-     */
-    public static long[] newCPUBitMask() {
-        return new long[(numCPUs() + 64 -1)/ 64];
-    }
-
-    /**
      * Returns the preferred node of the current thread.
      * @return preferred numa node.
      */
     public static int getPreferredNode() {
         return impl.preferredNode();
-    }
-
-    /**
-     * Set the memory allocation policy for the calling thread
-     * to local allocation.
-     */
-    public static void setLocalAlloc() {
-        impl.setLocalAlloc();
     }
 
     /**
@@ -138,6 +120,14 @@ public class Numa extends Logging {
      */
     public static void setPreferred(int node) {
         impl.setPreferred(node);
+    }
+
+    /**
+     * Set the memory allocation policy for the calling thread
+     * to local allocation.
+     */
+    public static void setLocalAlloc() {
+        impl.setLocalAlloc();
     }
 
     /**
@@ -154,7 +144,26 @@ public class Numa extends Logging {
     }
 
     /**
-     * Allocate a new NUMA buffer using the current policy. You must release the acquired buffer
+     * Allocate a new NUMA buffer of the specified capacity.
+     * @param capacity the required size
+     * @return the raw memory address
+     */
+    public static long allocMemory(long capacity) {
+        return impl.allocMemory(capacity);
+    }
+
+    /**
+     * Release the memory resource allocated at the specified address and capacity.
+     * @param address the raw memory address
+     * @param capacity the allocated size
+     */
+    public static void free(long address, long capacity) {
+        impl.free(address, capacity);
+    }
+
+    /**
+     * Allocate a new NUMA buffer using the current policy.
+     * You must release the acquired buffer
      * by {@link #free(java.nio.ByteBuffer)} because
      * it is out of the control of GC.
      * @param capacity byte size of the buffer
@@ -165,7 +174,8 @@ public class Numa extends Logging {
     }
 
     /**
-     * Allocate a new local NUMA buffer. You must release the acquired buffer
+     * Allocate a new local NUMA buffer.
+     * You must release the acquired buffer
      * by {@link #free(java.nio.ByteBuffer)} because
      * it is out of the control of GC.
      * @param capacity byte size of the buffer
@@ -196,24 +206,6 @@ public class Numa extends Logging {
      */
     public static ByteBuffer allocInterleaved(int capacity) {
         return impl.allocInterleaved(capacity);
-    }
-
-    /**
-     * Allocate a new NUMA buffer of the specified capacity.
-     * @param capacity the required size
-     * @return the raw memory address
-     */
-    public static long allocMemory(long capacity) {
-        return impl.allocMemory(capacity);
-    }
-
-    /**
-     * Release the memory resource allocated at the specified address and capacity.
-     * @param address the raw memory address
-     * @param capacity the allocated size
-     */
-    public static void free(long address, long capacity) {
-        impl.free(address, capacity);
     }
 
     /**
