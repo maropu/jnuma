@@ -16,6 +16,7 @@
 
 package xerial.jnuma;
 
+import xerial.jnuma.utils.Logging;
 import xerial.jnuma.utils.NativeLibLoader;
 
 import java.util.HashSet;
@@ -24,15 +25,16 @@ import java.util.Set;
 /**
  * Load a native library into JVM.
  */
-public class JnumaLibLoader {
+public class JnumaLibLoader extends Logging {
   private static final Set<String> LIBNUMA_PATHS;
 
   static {
     LIBNUMA_PATHS = new HashSet<String>();
     LIBNUMA_PATHS.add(System.getProperty("xerial.junma.libnuma.path"));
     LIBNUMA_PATHS.add(System.getenv("NUMALIB_LIBRARY_PATH"));
-    LIBNUMA_PATHS.add("/usr/lib/libnuma.so");
+    LIBNUMA_PATHS.add("/usr/lib64/libnuma.so");
     LIBNUMA_PATHS.add("/usr/lib/x86_64-linux-gnu/libnuma.so");
+    LIBNUMA_PATHS.add("/usr/lib/libnuma.so");
   }
 
   private static NativeLibLoader loader = new NativeLibLoader("jnuma");
@@ -61,6 +63,7 @@ public class JnumaLibLoader {
     } catch (Throwable e) {
       return false;
     }
+    logger.info("Load " + name + " into JVM");
     return true;
   }
 }

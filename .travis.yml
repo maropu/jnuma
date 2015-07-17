@@ -12,10 +12,11 @@ branches:
 only:
  - master
 
+sudo: true
+
 install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq libnuma-dev numactl
- - find / -type name libnuma.so
  - numactl --hardware
 
 script: ./bin/sbt -Dloglevel=debug test

@@ -17,8 +17,8 @@
 package xerial.jnuma;
 
 import java.nio.ByteBuffer;
-import java.util.logging.Logger;
 
+import xerial.jnuma.utils.Logging;
 import xerial.jnuma.utils.OSInfo;
 
 /**
@@ -30,13 +30,11 @@ import xerial.jnuma.utils.OSInfo;
  *
  * @author Taro L. Saito
  */
-public class Numa {
+public class Numa extends Logging {
 
     // The NUMA API implementation
     private static NumaInterface impl = null;
 
-    private static Logger logger =
-            Logger.getLogger(Numa.class.getName());
 
     static {
         if (OSInfo.getOSName().equals("linux")
