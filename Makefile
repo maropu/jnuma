@@ -1,32 +1,31 @@
-
-
-SRC:=src/main/java
+JAVA_SRC:=src/main/java
+CPP_SRC:=src/main/resources/cpp-gen
 TARGET:=target
 
 CC:=gcc
 
-jniheader: $(SRC)/xerial/jnuma/NumaNative.h
+jniheader: $(CPP_SRC)/NumaNative.h
 
-compile: $(wildcard $(SRC)/xerial/jnuma/*.java)
+compile: $(wildcard $(JAVA_SRC)/xerial/jnuma/*.java)
 	bin/sbt compile
 
-native: src/main/resources/xerial/jnuma/native/libjnuma.so
+native: src/main/resources/xerial/jnuma/native/linux/x86_64/libjnuma.so
 
-$(SRC)/xerial/jnuma/NumaNative.h: $(SRC)/xerial/jnuma/NumaNative.java compile
+$(CPP_SRC)/NumaNative.h: $(JAVA_SRC)/xerial/jnuma/NumaNative.java compile
 	javah -classpath $(TARGET)/classes -o $@ xerial.jnuma.NumaNative
 
-$(TARGET)/lib/NumaNative.o : $(SRC)/xerial/jnuma/NumaNative.c
+$(TARGET)/lib/NumaNative.o: $(CPP_SRC)/NumaNative.c
 	@mkdir -p $(@D)
-	$(CC) -O2 -fPIC -m64 -I include -I $(SRC)/xerial/jnuma -c $< -o $@
+	$(CC) -O2 -fPIC -m64 -I include -I $(CPP_SRC) -c $< -o $@
 
 $(TARGET)/lib/libjnuma.so : $(TARGET)/lib/NumaNative.o
-	$(CC) -Wl -O2 -fPIC -m64  -L/usr/lib64 -lnuma -o $@ $+  -shared -static-libgcc
+	$(CC) -O2 -fPIC -m64  -L/usr/lib64 -lnuma -o $@ $+  -shared -static-libgcc
 	strip $@
 
-src/main/resources/xerial/jnuma/native/libjnuma.so : $(TARGET)/lib/libjnuma.so
+src/main/resources/xerial/jnuma/native/linux/x86_64/libjnuma.so : $(TARGET)/lib/libjnuma.so
 	@mkdir -p $(@D)
 	cp $< $@
 
-clean-native: 
+clean-native:
 	rm -f $(TARGET)/lib/*
 

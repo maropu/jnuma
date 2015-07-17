@@ -31,9 +31,6 @@ public class NumaNative implements NumaInterface {
     public native long nodeSize(int node);
     public native long freeSize(int node);
     public native int distance(int node1, int node2);
-    public native void nodeToCpus(int node, long[] buffer);
-    public native void getAffinity(int pid, long[] cpuBitMask, int numCPUs);
-    public native void setAffinity(int pid, long[] cpuBitMask, int numCPUs);
 
     public native int preferredNode();
     public native void setLocalAlloc();

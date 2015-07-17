@@ -56,16 +56,6 @@ class NumaTest extends MySpec {
         s.mkString
       }
 
-      for (node <- 0 until numNodes) {
-        val cpuVector = Numa.nodeToCpus(node)
-        logger.info(s"node ${node} -> cpus ${toBitString(cpuVector)}")
-      }
-
-      val affinity = (0 until numCpus).map { cpu =>
-        Numa.getAffinity()
-      }
-      logger.info(s"affinity: ${affinity.map(toBitString(_)).mkString(", ")}")
-
       val preferred = (0 until numCpus).map { cpu =>
           Numa.runOnNode(cpu % numNodes)
           Numa.setPreferred(cpu % numNodes)
@@ -74,21 +64,6 @@ class NumaTest extends MySpec {
           n
       }
       logger.info(s"setting prefererd NUMA nodes: ${preferred.mkString(", ")}")
-
-      val s = (0 until numCpus).map { cpu =>
-          Numa.setAffinity((cpu + 1) % numCpus)
-          if (cpu % 2 == 0)
-            (0 until Int.MaxValue / 10).foreach { i => }
-          Numa.getAffinity()
-      }
-      logger.info(s"affinity after setting: ${s.map(toBitString(_)).mkString(", ")}")
-
-      val r = (0 until numCpus).map {
-        cpu =>
-          Numa.resetAffinity()
-          Numa.getAffinity()
-      }
-      logger.info(s"affinity after resetting: ${r.map(toBitString(_)).mkString(", ")}")
     }
 
     "allocate local buffer" in {
@@ -130,13 +105,6 @@ class NumaTest extends MySpec {
       Numa.free(b0)
       Numa.free(b1)
       Numa.free(bi)
-    }
-
-    def boundTo[U](cpu: Int)(f: => U): U = try {
-      Numa.setAffinity(cpu)
-      f
-    } finally {
-      Numa.resetAffinity
     }
 
     "retrieve array from another node" taggedAs "jarray" in {

@@ -49,30 +49,6 @@ JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_distance
 
 /*
  * Class:     xerial_jnuma_NumaNative
- * Method:    nodeToCpus
- * Signature: (I[J)V
- */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_nodeToCpus
-  (JNIEnv *, jobject, jint, jlongArray);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    getAffinity
- * Signature: (I[JI)V
- */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_getAffinity
-  (JNIEnv *, jobject, jint, jlongArray, jint);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    setAffinity
- * Signature: (I[JI)V
- */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setAffinity
-  (JNIEnv *, jobject, jint, jlongArray, jint);
-
-/*
- * Class:     xerial_jnuma_NumaNative
  * Method:    preferredNode
  * Signature: ()I
  */

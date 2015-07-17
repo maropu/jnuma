@@ -16,27 +16,21 @@
 
 package xerial.jnuma;
 
-import java.util.HashSet;
+import xerial.jnuma.utils.NativeLibLoader;
 
 /**
- * This class will be used only when loading NUMA　native library. Do not reference this class in an import statement or source codes.
- *
- * @author Taro L. Saito
+ * Load a native library into JVM.
  */
-public class NumaJNILoader {
-    private static HashSet<String> loadedLib = new HashSet<String>();
+public class JnumaLibLoader {
+  private static NativeLibLoader loader = new NativeLibLoader("jnuma");
+  private static boolean isLoaded = false;
 
-    public static synchronized void load(String libPath) {
-        if(loadedLib.contains(libPath))
-            return;
-
-        try {
-            System.load(libPath);
-            loadedLib.add(libPath);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+  static synchronized public void load() throws Exception {
+    if (isLoaded) return;
+    // Load a library for libnuma in advance
+    // TODO: Remove a hard code for lading libnuma
+    System.load("/usr/lib/x86_64-linux-gnu/libnuma.so");
+    loader.load();
+    isLoaded = true;
+  }
 }

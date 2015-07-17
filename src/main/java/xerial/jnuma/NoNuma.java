@@ -64,20 +64,6 @@ public class NoNuma implements NumaInterface {
     }
 
     @Override
-    public void nodeToCpus(int node, long[] buffer) {
-    }
-
-    @Override
-    public void getAffinity(int pid, long[] cpuBitMask, int numCPUs) {
-        // do nothing
-    }
-
-    @Override
-    public void setAffinity(int pid, long[] cpuBitMask, int numCPUs) {
-        // do nothing
-    }
-
-    @Override
     public int preferredNode() {
         return 0;
     }

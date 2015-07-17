@@ -34,10 +34,6 @@ public interface NumaInterface {
     public long freeSize(int node);
 
     public int distance(int node1, int node2);
-    public void nodeToCpus(int node, long[] buffer);
-    public void getAffinity(int pid, long[] cpuBitMask, int numCPUs);
-    public void setAffinity(int pid, long[] cpuBitMask, int numCPUs);
-
     public int preferredNode();
     public void setLocalAlloc();
 
