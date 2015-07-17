@@ -31,6 +31,7 @@ public class JnumaLibLoader {
     LIBNUMA_PATHS = new HashSet<String>();
     LIBNUMA_PATHS.add(System.getProperty("xerial.junma.libnuma.path"));
     LIBNUMA_PATHS.add(System.getenv("NUMALIB_LIBRARY_PATH"));
+    LIBNUMA_PATHS.add("/usr/lib/libnuma.so");
     LIBNUMA_PATHS.add("/usr/lib/x86_64-linux-gnu/libnuma.so");
   }
 
