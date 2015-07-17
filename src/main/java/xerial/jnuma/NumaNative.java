@@ -51,7 +51,8 @@ public class NumaNative implements NumaInterface {
     public native long allocMemory(long capacity);
     public native void free(long address, long capacity);
 
+    // Used in a native code
     private void throwError(int errorCode) throws Exception {
-        throw new Exception(String.format("NUMA error occurred %d", errorCode));
+        throw new NumaException(String.format("NUMA error occurred %d", errorCode));
     }
 }

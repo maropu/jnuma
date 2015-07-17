@@ -16,6 +16,8 @@
 
 package xerial.jnuma;
 
+import sun.misc.Unsafe;
+
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 
@@ -25,17 +27,25 @@ import java.nio.ByteBuffer;
  */
 public class NoNuma implements NumaInterface {
 
-    private sun.misc.Unsafe unsafe;
+    // Reference to the Unsafe implementation
+    static final Unsafe unsafe;
 
-    public NoNuma() {
+    static {
+        Unsafe unsafeInstance = null;
         try {
-            Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
-            f.setAccessible(true);
-            unsafe = (sun.misc.Unsafe) f.get(null);
-        }
-        catch(Exception e) {
+            if (Class.forName("sun.misc.Unsafe") == null)
+                throw new RuntimeException("sun.misc.Unsafe not found.");
+            // Fetch theUnsafe object for Oracle and OpenJDK
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+            field.setAccessible(true);
+            unsafeInstance = (Unsafe) field.get(null);
+            if (unsafeInstance == null) {
+                throw new RuntimeException("Unsafe is unavailable.");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        unsafe = unsafeInstance;
     }
 
     @Override

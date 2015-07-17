@@ -15,6 +15,7 @@ only:
 install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq libnuma-dev numactl
+ - locate libnuma.so
  - numactl -s
 
 script: ./bin/sbt -Dloglevel=debug test
