@@ -94,8 +94,23 @@ public class NoNuma implements NumaInterface {
     }
 
     @Override
-    public long allocMemory(long capacity) {
+    public long allocate(long capacity) {
         return unsafe.allocateMemory(capacity);
+    }
+
+    @Override
+    public long allocateLocal(long capacity) {
+        return this.allocate(capacity);
+    }
+
+    @Override
+    public long allocateOnNode(long capacity, int node) {
+        return this.allocate(capacity);
+    }
+
+    @Override
+    public long allocateInterleaved(long capacity) {
+        return this.allocate(capacity);
     }
 
     @Override
@@ -104,32 +119,12 @@ public class NoNuma implements NumaInterface {
     }
 
     @Override
-    public ByteBuffer alloc(int capacity) {
-        return ByteBuffer.allocate(capacity);
+    public void toNode(long address, int length, int node) {
+        // do nothing
     }
 
     @Override
-    public ByteBuffer allocLocal(int capacity) {
-        return alloc(capacity);
-    }
-
-    public ByteBuffer allocOnNode(int capacity, int node) {
-        return allocLocal(capacity);
-    }
-
-    @Override
-    public ByteBuffer allocInterleaved(int capacity) {
-        return allocLocal(capacity);
-    }
-
-   @Override
-    public void free(ByteBuffer buf) {
-        // Simply clear the buffer and let the GC collect the freed memory.
-        buf.clear();
-    }
-
-    @Override
-    public void toNodeMemory(Object array, int length, int node) {
+    public void toNode(Object array, int length, int node) {
         // do nothing
     }
 }

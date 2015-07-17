@@ -92,59 +92,10 @@ JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_distance
 
 /*
  * Class:     xerial_jnuma_NumaNative
- * Method:    alloc
- * Signature: (I)Ljava/nio/ByteBuffer;
+ * Method:    allocate
+ * Signature: (J)J
  */
-JNIEXPORT jobject JNICALL Java_xerial_jnuma_NumaNative_alloc
-    (JNIEnv *env, jobject obj, jint capacity) {
-  void* mem = numa_alloc((size_t) capacity);
-  if(mem != NULL) {
-    return (*env)->NewDirectByteBuffer(env, mem, (jlong) capacity);
-  }
-  throwException(env, obj, errno);
-  return NULL;
-}
-
-JNIEXPORT jobject JNICALL Java_xerial_jnuma_NumaNative_allocLocal
-  (JNIEnv *env, jobject obj, jint capacity) {
-  void* mem = numa_alloc_local((size_t) capacity);
-  if(mem != NULL) {
-    return (*env)->NewDirectByteBuffer(env, mem, (jlong) capacity);
-  }
-  throwException(env, obj, errno);
-  return NULL;
-}
-
-JNIEXPORT jobject JNICALL Java_xerial_jnuma_NumaNative_allocOnNode
-    (JNIEnv *env, jobject obj, jint capacity, jint node) {
-  void* mem = numa_alloc_onnode((size_t) capacity, (int) node);
-  if(mem != NULL) {
-    return (*env)->NewDirectByteBuffer(env, mem, (jlong) capacity);
-  }
-  throwException(env, obj, errno);
-  return NULL;
-}
-
-JNIEXPORT jobject JNICALL Java_xerial_jnuma_NumaNative_allocInterleaved
-    (JNIEnv *env, jobject obj, jint capacity) {
-  void* mem = numa_alloc_interleaved((size_t) capacity);
-  if(mem != NULL) {
-    return (*env)->NewDirectByteBuffer(env, mem, (jlong) capacity);
-  }
-  throwException(env, obj, 11);
-  return NULL;
-}
-
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_free__Ljava_nio_ByteBuffer_2
-    (JNIEnv *env, jobject jobj, jobject buf) {
-  void* mem = (*env)->GetDirectBufferAddress(env, buf);
-  jlong capacity = (*env)->GetDirectBufferCapacity(env, buf);
-  if(mem != 0) {
-    numa_free(mem, (size_t) capacity);
-  }
-}
-
-JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocMemory
+JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocate
     (JNIEnv *env, jobject obj, jlong capacity) {
   void* mem = numa_alloc((size_t) capacity);
   if(mem != NULL) {
@@ -154,10 +105,55 @@ JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocMemory
   return 0L;
 }
 
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_free__JJ
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    allocateLocal
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocateLocal
+    (JNIEnv *env, jobject obj, jlong capacity) {
+  void* mem = numa_alloc_local((size_t) capacity);
+  if(mem != NULL) {
+    return (jlong) mem;
+  }
+  throwException(env, obj, 11);
+  return 0L;
+}
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    allocateOnNode
+ * Signature: (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocateOnNode
+    (JNIEnv *env, jobject obj, jlong capacity, jint node) {
+  void* mem = numa_alloc_onnode((size_t) capacity, node);
+  if(mem != NULL) {
+    return (jlong) mem;
+  }
+  throwException(env, obj, 11);
+  return 0L;
+}
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    allocateInterleaved
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocateInterleaved
+    (JNIEnv *env, jobject obj, jlong capacity) {
+  void* mem = numa_alloc_interleaved((size_t) capacity);
+  if(mem != NULL) {
+    return (jlong) mem;
+  }
+  throwException(env, obj, 11);
+  return 0L;
+}
+
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_free
     (JNIEnv *env, jobject jobj, jlong address, jlong capacity) {
   if(address != 0) {
-    numa_free((void *) address, (size_t) capacity);
+    numa_free((void*) address, (size_t) capacity);
   }
 }
 
@@ -206,12 +202,23 @@ JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_runOnNode
 
 /*
  * Class:     xerial_jnuma_NumaNative
+ * Method:    toNode
+ * Signature: (JII)V
+ */
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_toNode__JII
+    (JNIEnv *env, jobject obj, jlong address, jint length, jint node) {
+  numa_tonode_memory((void*) address, (size_t) length, (int) node);
+}
+
+/*
+ * Class:     xerial_jnuma_NumaNative
  * Method:    toNodeMemory
  * Signature: (Ljava/lang/Object;II)V
  */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_toNodeMemory
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_toNode__Ljava_lang_Object_2II
     (JNIEnv *env, jobject obj, jobject array, jint length, jint node) {
   void* buf = (void*) (*env)->GetPrimitiveArrayCritical(env, (jarray) array, 0);
   numa_tonode_memory(buf, (size_t) length, (int) node);
   (*env)->ReleasePrimitiveArrayCritical(env, (jarray) array, buf, (jint) 0);
 }
+

@@ -16,20 +16,10 @@
 
 package xerial.jnuma;
 
-import java.nio.ByteBuffer;
-
 import xerial.jnuma.utils.Logging;
 import xerial.jnuma.utils.OSInfo;
 
-/**
- * Numa API.
- *
- * When allocating new {@link java.nio.ByteBuffer}s using this API,
- * you must release these buffers by calling {@link Numa#free(java.nio.ByteBuffer)}
- * because the allocated buffers are out of control of the GC of the JVM.
- *
- * @author Taro L. Saito
- */
+/** Numa API. */
 public class Numa extends Logging {
 
     // The NUMA API implementation
@@ -145,86 +135,41 @@ public class Numa extends Logging {
 
     /**
      * Allocate a new NUMA buffer of the specified capacity.
-     * @param capacity the required size
-     * @return the raw memory address
      */
-    public static long allocMemory(long capacity) {
-        return impl.allocMemory(capacity);
+    public static long allocate(long capacity) {
+        return impl.allocate(capacity);
+    }
+    public long allocateLocal(long capacity) {
+        return impl.allocateLocal(capacity);
+    }
+    public long allocateOnNode(long capacity, int node) {
+        return impl.allocateOnNode(capacity, node);
+    }
+    public long allocateInterleaved(long capacity) {
+        return impl.allocateInterleaved(capacity);
     }
 
     /**
-     * Release the memory resource allocated at the specified address and capacity.
-     * @param address the raw memory address
-     * @param capacity the allocated size
+     * Release the memory resource allocated at the specified
+     * address and capacity.
      */
     public static void free(long address, long capacity) {
         impl.free(address, capacity);
     }
 
     /**
-     * Allocate a new NUMA buffer using the current policy.
-     * You must release the acquired buffer
-     * by {@link #free(java.nio.ByteBuffer)} because
-     * it is out of the control of GC.
-     * @param capacity byte size of the buffer
-     * @return new ByteBuffer
+     * Move given memory range to a node.
      */
-    public static ByteBuffer alloc(int capacity) {
-        return impl.alloc(capacity);
+    public static void toNode(long address, int byteLength, int node) {
+        impl.toNode(address, byteLength, node);
     }
 
     /**
-     * Allocate a new local NUMA buffer.
-     * You must release the acquired buffer
-     * by {@link #free(java.nio.ByteBuffer)} because
-     * it is out of the control of GC.
-     * @param capacity byte size of the buffer
-     * @return new ByteBuffer
-     */
-    public static ByteBuffer allocLocal(int capacity) {
-        return impl.allocLocal(capacity);
-    }
-
-    /**
-     * Allocate a new NUMA buffer on a specific node.
-     * You must release the acquired buffer by {@link #free(java.nio.ByteBuffer)}
-     * because it is out of the control of GC.
-     * @param capacity buffer size
-     * @param node node number
-     * @return new ByteBuffer
-     */
-    public static ByteBuffer allocOnNode(int capacity, int node) {
-        return impl.allocOnNode(capacity, node);
-    }
-
-    /**
-     * Allocate a new NUMA buffer interleaved on multiple NUMA nodes.
-     * You must release the acquired buffer by {@link #free(java.nio.ByteBuffer)}
-     * because it is out of the control of GC.
-     * @param capacity the buffer size
-     * @return new ByteBuffer
-     */
-    public static ByteBuffer allocInterleaved(int capacity) {
-        return impl.allocInterleaved(capacity);
-    }
-
-    /**
-     * Release the memory resources of the NUMA ByteBuffer.
-     * @param buf the buffer to release
-     */
-    public static void free(ByteBuffer buf) {
-        impl.free(buf);
-    }
-
-    /**
-     * Send the array to a node. The array should be a primitive type array.
+     * Send the primitive-typed array to a given node.
      * To send the array to a node correctly,
      * the array should not be touched before calling this method.
-     * @param array
-     * @param byteLength
-     * @param node
      */
-    public static void toNodeMemory(Object array, int byteLength, int node) {
-        impl.toNodeMemory(array, byteLength, node);
+    public static void toNode(Object array, int byteLength, int node) {
+        impl.toNode(array, byteLength, node);
     }
 }

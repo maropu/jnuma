@@ -68,8 +68,8 @@ class NumaTest extends MySpec {
 
     "allocate local buffer" in {
       for (i <- 0 until 3) {
-        val local = Numa.allocLocal(1024)
-        Numa.free(local)
+        val local = Numa.allocate(1024)
+        Numa.free(local, 1024)
       }
     }
 
@@ -90,21 +90,21 @@ class NumaTest extends MySpec {
 
       val bl = ByteBuffer.allocateDirect(8 * 1024 * 1024)
       val bj = ByteBuffer.allocate(8 * 1024 * 1024)
-      val b0 = Numa.allocOnNode(8 * 1024 * 1024, 0)
-      val b1 = Numa.allocOnNode(8 * 1024 * 1024, 1)
-      val bi = Numa.allocInterleaved(8 * 1024 * 1024)
+      // val b0 = Numa.allcate(8 * 1024 * 1024, 0)
+      // val b1 = Numa.allocateOnNode(8 * 1024 * 1024, 1)
+      // val bi = Numa.allocateInterleaved(8 * 1024 * 1024)
 
       time("numa random access", repeat = 10) {
         block("direct") { access(bl) }
         block("heap") { access(bj) }
-        block("numa0") { access(b0) }
-        block("numa1") { access(b1) }
-        block("interleaved") { access(bi) }
+        // block("numa0") { access(b0) }
+        // block("numa1") { access(b1) }
+        // block("interleaved") { access(bi) }
       }
 
-      Numa.free(b0)
-      Numa.free(b1)
-      Numa.free(bi)
+      // Numa.free(b0, 8 * 1024 * 1024)
+      // Numa.free(b1, 8 * 1024 * 1024)
+      // Numa.free(bi, 8 * 1024 * 1024)
     }
 
     "retrieve array from another node" taggedAs "jarray" in {
@@ -124,7 +124,7 @@ class NumaTest extends MySpec {
           write {
             val bufSize = 1024 * 1024
             val a = new Array[Int](bufSize)
-            Numa.toNodeMemory(a, bufSize * 4, 0)
+            Numa.toNode(a, bufSize * 4, 0)
             a
           }
           Numa.setLocalAlloc
@@ -135,7 +135,7 @@ class NumaTest extends MySpec {
           write {
             val bufSize = 1024 * 1024
             val a = new Array[Int](bufSize)
-            Numa.toNodeMemory(a, bufSize * 4, 1)
+            Numa.toNode(a, bufSize * 4, 1)
             a
           }
           Numa.setLocalAlloc
@@ -143,17 +143,6 @@ class NumaTest extends MySpec {
       }
 
       Numa.runOnAllNodes()
-    }
-
-    "allocate memory" in {
-      val size = 1L * 1024 * 1024
-      var addr = 0L
-      try {
-        addr = Numa.allocMemory(size)
-      } finally {
-        if(addr != 0L)
-          Numa.free(addr, size)
-      }
     }
   }
 }

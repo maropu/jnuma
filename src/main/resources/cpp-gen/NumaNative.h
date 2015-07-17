@@ -49,18 +49,18 @@ JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_distance
 
 /*
  * Class:     xerial_jnuma_NumaNative
+ * Method:    runOnNode
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_runOnNode
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
  * Method:    preferredNode
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_preferredNode
-  (JNIEnv *, jobject);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    setLocalAlloc
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setLocalAlloc
   (JNIEnv *, jobject);
 
 /*
@@ -73,66 +73,42 @@ JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setPreferred
 
 /*
  * Class:     xerial_jnuma_NumaNative
- * Method:    runOnNode
- * Signature: (I)V
+ * Method:    setLocalAlloc
+ * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_runOnNode
-  (JNIEnv *, jobject, jint);
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setLocalAlloc
+  (JNIEnv *, jobject);
 
 /*
  * Class:     xerial_jnuma_NumaNative
- * Method:    toNodeMemory
- * Signature: (Ljava/lang/Object;II)V
- */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_toNodeMemory
-  (JNIEnv *, jobject, jobject, jint, jint);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    alloc
- * Signature: (I)Ljava/nio/ByteBuffer;
- */
-JNIEXPORT jobject JNICALL Java_xerial_jnuma_NumaNative_alloc
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    allocLocal
- * Signature: (I)Ljava/nio/ByteBuffer;
- */
-JNIEXPORT jobject JNICALL Java_xerial_jnuma_NumaNative_allocLocal
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    allocOnNode
- * Signature: (II)Ljava/nio/ByteBuffer;
- */
-JNIEXPORT jobject JNICALL Java_xerial_jnuma_NumaNative_allocOnNode
-  (JNIEnv *, jobject, jint, jint);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    allocInterleaved
- * Signature: (I)Ljava/nio/ByteBuffer;
- */
-JNIEXPORT jobject JNICALL Java_xerial_jnuma_NumaNative_allocInterleaved
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    free
- * Signature: (Ljava/nio/ByteBuffer;)V
- */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_free__Ljava_nio_ByteBuffer_2
-  (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     xerial_jnuma_NumaNative
- * Method:    allocMemory
+ * Method:    allocate
  * Signature: (J)J
  */
-JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocMemory
+JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocate
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    allocateLocal
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocateLocal
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    allocateOnNode
+ * Signature: (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocateOnNode
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    allocateInterleaved
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocateInterleaved
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -140,8 +116,24 @@ JNIEXPORT jlong JNICALL Java_xerial_jnuma_NumaNative_allocMemory
  * Method:    free
  * Signature: (JJ)V
  */
-JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_free__JJ
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_free
   (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    toNode
+ * Signature: (JII)V
+ */
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_toNode__JII
+  (JNIEnv *, jobject, jlong, jint, jint);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    toNode
+ * Signature: (Ljava/lang/Object;II)V
+ */
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_toNode__Ljava_lang_Object_2II
+  (JNIEnv *, jobject, jobject, jint, jint);
 
 #ifdef __cplusplus
 }

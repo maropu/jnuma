@@ -1,6 +1,6 @@
 JAVA_SRC:=src/main/java
 CPP_SRC:=src/main/resources/cpp-gen
-TARGET:=target
+TARGET:=target/scala-2.10
 
 CC:=gcc
 

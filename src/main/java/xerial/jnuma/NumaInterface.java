@@ -16,8 +16,6 @@
 
 package xerial.jnuma;
 
-import java.nio.ByteBuffer;
-
 /** NUMA API Interface. */
 public interface NumaInterface {
 
@@ -44,16 +42,13 @@ public interface NumaInterface {
     public void setLocalAlloc();
 
     // Allocate and free raw memory
-    public long allocMemory(long capacity);
+    public long allocate(long capacity);
+    public long allocateLocal(long capacity);
+    public long allocateOnNode(long capacity, int node);
+    public long allocateInterleaved(long capacity);
     public void free(long address, long capacity);
 
-    // Helper functions to allocate and free ByteBuffer
-    public ByteBuffer alloc(int capacity);
-    public ByteBuffer allocLocal(int capacity);
-    public ByteBuffer allocOnNode(int capacity, int node);
-    public ByteBuffer allocInterleaved(int capacity);
-    public void free(ByteBuffer buf);
-
     // Move a given memory range into the node
-    public void toNodeMemory(Object array, int length, int node);
+    public void toNode(long address, int length, int node);
+    public void toNode(Object array, int length, int node);
 }

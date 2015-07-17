@@ -16,8 +16,6 @@
 
 package xerial.jnuma;
 
-import java.nio.ByteBuffer;
-
 /**
  * Native code interface. Do not describe this class name in an import statement
  * or source codes, because it will break the native code loading mechanism.
@@ -37,14 +35,13 @@ public class NumaNative implements NumaInterface {
     @Override public native int preferredNode();
     @Override public native void setPreferred(int node);
     @Override public native void setLocalAlloc();
-    @Override public native long allocMemory(long capacity);
+    @Override public native long allocate(long capacity);
+    @Override public native long allocateLocal(long capacity);
+    @Override public native long allocateOnNode(long capacity, int node);
+    @Override public native long allocateInterleaved(long capacity);
     @Override public native void free(long address, long capacity);
-    @Override public native ByteBuffer alloc(int capacity);
-    @Override public native ByteBuffer allocLocal(int capacity);
-    @Override public native ByteBuffer allocOnNode(int capacity, int node);
-    @Override public native ByteBuffer allocInterleaved(int capacity);
-    @Override public native void free(ByteBuffer buf);
-    @Override public native void toNodeMemory(Object array, int length, int node);
+    @Override public native void toNode(long address, int length, int node);
+    @Override public native void toNode(Object array, int length, int node);
 
     // Used in a native code
     private void throwError(int errorCode) throws Exception {
