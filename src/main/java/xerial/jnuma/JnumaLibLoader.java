@@ -29,7 +29,11 @@ public class JnumaLibLoader {
     if (isLoaded) return;
     // Load a library for libnuma in advance
     // TODO: Remove a hard code for lading libnuma
-    System.load("/usr/lib/x86_64-linux-gnu/libnuma.so");
+    try {
+      System.load("/usr/lib/x86_64-linux-gnu/libnuma.so");
+    } catch (Error e) {
+      throw new RuntimeException();
+    }
     loader.load();
     isLoaded = true;
   }
