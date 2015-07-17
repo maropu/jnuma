@@ -8,7 +8,7 @@ net.virtualvoid.sbt.graph.Plugin.graphSettings
 
 libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.10" % "2.2.5" % "provided",
-  "org.xerial" % "xerial-core" % "3.4.0" % "provided"
+  "org.xerial" % "xerial-core" % "3.2.2" % "provided"
 )
 
 mergeStrategy in assembly := {
