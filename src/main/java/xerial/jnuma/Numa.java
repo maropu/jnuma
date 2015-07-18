@@ -129,6 +129,59 @@ public class Numa extends Logging {
     }
 
     /**
+     * Set the affinity of this thread to a single CPU.
+     * @param cpu cpu number
+     */
+    public static void setAffinity(int cpu) {
+        setAffinityImpl(newCPUBitMaskForOneCPU(cpu));
+    }
+
+    /**
+     * Reset the affinity of the current thread to CPUs.
+     */
+    public static void resetAffinity() {
+        impl.setAffinity(0, newCPUBitMaskForAllCPUs(), numCPUs());
+    }
+
+    /**
+     * Set the affinity of this thread to CPUs specified
+     * in the bit vector.
+     * @param cpuBitMask bit vector.
+     */
+    private static void setAffinityImpl(long[] cpuBitMask) {
+        impl.setAffinity(0, cpuBitMask, numCPUs());
+    }
+
+    /**
+     * Create a bit mask for specifying CPU sets.
+     * From the LSB, it corresponds CPU0, CPU1, CPU2, ...
+     */
+    private static long[] newCPUBitMask() {
+        return new long[(numCPUs() + 64 -1) / 64];
+    }
+
+    /**
+     * Create a bit mask setting a single CPU on.
+     * @param cpu number
+     */
+    private static long[] newCPUBitMaskForOneCPU(int cpu) {
+        long[] cpuMask = newCPUBitMask();
+        cpuMask[cpu / 64] |= 1L << (cpu % 64);
+        return cpuMask;
+    }
+
+    /**
+     * Create a bit mask setting all CPUs on.
+     */
+    private static long[] newCPUBitMaskForAllCPUs() {
+        long[] cpuMask = newCPUBitMask();
+        int M = numCPUs();
+        for(int i=0; i<cpuMask.length; ++i)
+            cpuMask[i] |= (i*64 > M) ? ~0L : ~(~0L << (M % 64));
+        return cpuMask;
+    }
+
+    /**
      * Run the current thread and its children on a specified node.
      * To reset the binding call {@link #runOnAllNodes()}.
      * @param node

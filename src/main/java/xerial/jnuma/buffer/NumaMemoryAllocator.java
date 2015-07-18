@@ -35,6 +35,7 @@ public class NumaMemoryAllocator extends Logging {
     private AtomicLong[] numaAllocatedSize = new AtomicLong[Numa.numNodes()];
 
     {
+        // Allocate each entry for counters
         for (int i = 0; i < Numa.numNodes(); i++) {
             numaAllocatedSize[i] = new AtomicLong(0);
         }

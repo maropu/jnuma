@@ -44,6 +44,10 @@ public interface NumaInterface {
     public void setPreferred(int node);
     public void setLocalAlloc();
 
+    // Handle affinity properties for tasks
+    public void getAffinity(int pid, long[] cpuBitMask, int numCPUs);
+    public void setAffinity(int pid, long[] cpuBitMask, int numCPUs);
+
     // Allocate and free raw memory
     public long allocate(long capacity);
     public long allocateLocal(long capacity);

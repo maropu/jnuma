@@ -16,21 +16,7 @@
 
 package xerial.jnuma
 
-import java.nio.ByteBuffer
-import java.util.logging.Logger
-
-import scala.util.Random
-import org.scalatest.{Tag, WordSpec}
-
-import xerial.core.util.Timer
-
-/**
- * @author leo
- */
-class NumaTest extends WordSpec with Timer {
-  import NumaTest._
-
-  implicit def toTag(s:String) = Tag(s)
+class NumaTest extends MySpec {
 
   "Numa" should {
     "report NUMA info" taggedAs "report" in {
@@ -61,90 +47,50 @@ class NumaTest extends WordSpec with Timer {
           Numa.runOnAllNodes()
           n
       }
-      logger.info(s"setting prefererd NUMA nodes: ${preferred.mkString(", ")}")
     }
 
     "allocate local buffer" in {
       for (i <- 0 until 3) {
-        val local = Numa.allocate(1024)
-        Numa.free(local, 1024)
+        Numa.free(Numa.allocate(1024), 1024)
       }
     }
 
-    "allocate buffer on nodes" in {
-      val N = 100000
-
-      val access: ByteBuffer => Unit = (b: ByteBuffer) => {
-        val r = new Random(0)
-        var i = 0
-        val p = 1024
-        val buf = new Array[Byte](p)
-        while (i < N) {
-          b.position(r.nextInt(b.capacity() / p) * p)
-          b.get(buf)
-          i += 1
+    def write(f: => Array[Int]) = {
+      val r = new scala.util.Random(13)
+      for(i <- 0 until 3) {
+        val arr = f
+        for (index <- 0 until arr.length) {
+          arr(index) = r.nextInt()
         }
       }
-
-      val bl = ByteBuffer.allocateDirect(8 * 1024 * 1024)
-      val bj = ByteBuffer.allocate(8 * 1024 * 1024)
-      // val b0 = Numa.allcate(8 * 1024 * 1024, 0)
-      // val b1 = Numa.allocateOnNode(8 * 1024 * 1024, 1)
-      // val bi = Numa.allocateInterleaved(8 * 1024 * 1024)
-
-      time("numa random access", repeat = 10) {
-        block("direct") { access(bl) }
-        block("heap") { access(bj) }
-        // block("numa0") { access(b0) }
-        // block("numa1") { access(b1) }
-        // block("interleaved") { access(bi) }
-      }
-
-      // Numa.free(b0, 8 * 1024 * 1024)
-      // Numa.free(b1, 8 * 1024 * 1024)
-      // Numa.free(bi, 8 * 1024 * 1024)
     }
 
-    "retrieve array from another node" taggedAs "jarray" in {
-      def write(f: => Array[Int]) = {
-        val r = new Random(13)
-        for(i <- 0 until 3) {
-          val arr = f
-          for (index <- 0 until arr.length) {
-            arr(index) = r.nextInt()
+    def boundTo[U](cpu: Int)(f: => U): U = try {
+      Numa.setAffinity(cpu)
+      f
+    } finally {
+      Numa.resetAffinity
+    }
+
+    "access java array in another node" taggedAs "jarray" in {
+      for (i <- 0 until Numa.numNodes()) {
+        write {
+          val bufSize = 1024 * 1024
+          val arr = new Array[Int](bufSize)
+          Numa.toNode(arr, bufSize * 4, i)
+          arr
+        }
+      }
+    }
+
+    "set affinity" taggedAs "affinity" in {
+      (0 until Numa.numCPUs()).map { cpu =>
+        boundTo(cpu) {
+          write {
+            new Array[Int](1024 * 1024)
           }
         }
       }
-
-      time("numa", repeat = 2) {
-        block("node0") {
-          Numa.setPreferred(0)
-          write {
-            val bufSize = 1024 * 1024
-            val a = new Array[Int](bufSize)
-            Numa.toNode(a, bufSize * 4, 0)
-            a
-          }
-          Numa.setLocalAlloc
-        }
-
-        block("node1") {
-          Numa.setPreferred(1)
-          write {
-            val bufSize = 1024 * 1024
-            val a = new Array[Int](bufSize)
-            Numa.toNode(a, bufSize * 4, 1)
-            a
-          }
-          Numa.setLocalAlloc
-        }
-      }
-
-      Numa.runOnAllNodes()
     }
   }
-}
-
-object NumaTest {
-  val logger: Logger = Logger.getLogger(this.getClass.getName())
 }

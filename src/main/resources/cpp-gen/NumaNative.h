@@ -89,6 +89,22 @@ JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setLocalAlloc
 
 /*
  * Class:     xerial_jnuma_NumaNative
+ * Method:    getAffinity
+ * Signature: (I[JI)V
+ */
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_getAffinity
+  (JNIEnv *, jobject, jint, jlongArray, jint);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    setAffinity
+ * Signature: (I[JI)V
+ */
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setAffinity
+  (JNIEnv *, jobject, jint, jlongArray, jint);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
  * Method:    allocate
  * Signature: (J)J
  */

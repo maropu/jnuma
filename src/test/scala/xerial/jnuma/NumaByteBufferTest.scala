@@ -16,12 +16,11 @@
 
 package xerial.jnuma
 
-import org.scalatest.{Tag, WordSpec}
+import java.nio.ByteBuffer
+
 import xerial.jnuma.buffer.NumaByteBuffer
 
-class NumaByteBufferTest extends WordSpec {
-
-  implicit def toTag(s:String) = Tag(s)
+class NumaByteBufferTest extends MySpec {
 
   "NumaByteBuffer" should {
 
@@ -38,6 +37,39 @@ class NumaByteBufferTest extends WordSpec {
       buf.putLong(16, 31L)
       val bb = buf.toDirectByteBuffer(16, 8)
       assert(bb.getLong() === 31L)
+    }
+
+    "allocate buffer on nodes" in {
+      val N = 100000
+
+      val access: ByteBuffer => Unit = (b: ByteBuffer) => {
+        val r = new scala.util.Random(0)
+        var i = 0
+        val p = 1024
+        val buf = new Array[Byte](p)
+        while (i < N) {
+          b.position(r.nextInt(b.capacity() / p) * p)
+          b.get(buf)
+          i += 1
+        }
+      }
+
+      val bbd = ByteBuffer.allocateDirect(8 * 1024 * 1024)
+      val bbh = ByteBuffer.allocate(8 * 1024 * 1024)
+      val bbn = new Array[NumaByteBuffer](Numa.numNodes())
+      for (i <- 0 until bbn.length) {
+        bbn(i) = new NumaByteBuffer(8 * 1024 * 1024)
+      }
+
+      time("numa random access", repeat = 10) {
+        block("direct") { access(bbd) }
+        block("heap") { access(bbh) }
+        for (i <- 0 until bbn.length) {
+          block("numa" + i) {
+            access(bbn(i).toDirectByteBuffer)
+          }
+        }
+      }
     }
   }
 }

@@ -36,6 +36,8 @@ public class NumaNative implements NumaInterface {
     @Override public native int preferredNode();
     @Override public native void setPreferred(int node);
     @Override public native void setLocalAlloc();
+    @Override public native void getAffinity(int pid, long[] cpuBitMask, int numCPUs);
+    @Override public native void setAffinity(int pid, long[] cpuBitMask, int numCPUs);
     @Override public native long allocate(long capacity);
     @Override public native long allocateLocal(long capacity);
     @Override public native long allocateOnNode(long capacity, int node);

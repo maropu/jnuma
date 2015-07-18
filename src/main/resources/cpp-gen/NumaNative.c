@@ -190,6 +190,51 @@ JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setLocalAlloc
 
 /*
  * Class:     xerial_jnuma_NumaNative
+ * Method:    getAffinity
+ * Signature: (I[JI)V
+ */
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_getAffinity
+    (JNIEnv *env, jobject obj, jint pid, jlongArray maskBuf, jint numCPUs) {
+  uint64_t* in = (uint64_t*) (*env)->GetPrimitiveArrayCritical(env, (jarray) maskBuf, 0);
+  cpu_set_t mask;
+  if (in == 0) {
+    throwException(env, obj, 10);
+  }
+  CPU_ZERO(&mask);
+  const int ret = sched_getaffinity(0, sizeof(mask), &mask);
+  if (ret < 0) {
+    throwException(env, obj, ret);
+  }
+  for (int i = 0; i < numCPUs; ++i) {
+    if (CPU_ISSET(i, &mask))
+      in[i / 64] |= (uint64_t) (((uint64_t) 1) << (i % 64));
+  }
+  (*env)->ReleasePrimitiveArrayCritical(env, (jarray) maskBuf, (void*) in, (jint) 0);
+}
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    setAffinity
+ * Signature: (I[JI)V
+ */
+JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setAffinity
+    (JNIEnv *env, jobject obj, jint pid, jlongArray maskBuf, jint numCPUs) {
+  uint64_t* in = (uint64_t*) (*env)->GetPrimitiveArrayCritical(env, (jarray) maskBuf, 0);
+  cpu_set_t mask;
+  CPU_ZERO(&mask);
+  for (int i = 0; i < numCPUs; ++i) {
+    if (in[i / 64] & ((uint64_t) 1 << (i % 64)))
+      CPU_SET((int) i, &mask);
+  }
+  (*env)->ReleasePrimitiveArrayCritical(env, (jarray) maskBuf, (void*) in, (jint) 0);
+  const int ret = sched_setaffinity(0, sizeof(cpu_set_t), &mask);
+  if (ret < 0) {
+    throwException(env, obj, errno);
+  }
+}
+
+/*
+ * Class:     xerial_jnuma_NumaNative
  * Method:    setPreferred
  * Signature: (I)V
  */

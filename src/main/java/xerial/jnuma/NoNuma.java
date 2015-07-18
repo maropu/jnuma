@@ -75,6 +75,16 @@ public class NoNuma implements NumaInterface {
     }
 
     @Override
+    public void getAffinity(int pid, long[] cpuBitMask, int numCPUs) {
+        // do nothing
+    }
+
+    @Override
+    public void setAffinity(int pid, long[] cpuBitMask, int numCPUs) {
+        // do nothing
+    }
+
+    @Override
     public long allocate(long capacity) {
         return PlatformDependent.UNSAFE.allocateMemory(capacity);
     }

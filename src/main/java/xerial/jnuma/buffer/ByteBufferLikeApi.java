@@ -127,4 +127,17 @@ abstract class ByteBufferLikeApi {
         bb.order(ByteOrder.nativeOrder());
         return bb;
     }
+
+    public ByteBuffer toDirectByteBuffer() {
+        if (m.size() > Integer.MAX_VALUE) {
+            // Turn the exception into unchecked so we can find out
+            // about it at runtime, but don't need
+            // to add lots of boilerplate code everywhere.
+            PlatformDependent.throwException(
+                    new IllegalStateException("Allowable 32-bit size exceeded: " + m.size()));
+        }
+        ByteBuffer bb = PlatformDependent.newDirectByteBuffer(address(), (int) m.size());
+        bb.order(ByteOrder.nativeOrder());
+        return bb;
+    }
 }

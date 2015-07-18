@@ -140,4 +140,12 @@ public final class PlatformDependent {
                   + e.getMessage());
         }
     }
+
+  /**
+   * Raise an exception bypassing compiler checks
+   * for checked exceptions.
+   */
+  public static void throwException(Throwable t) {
+    _UNSAFE.throwException(t);
+  }
 }
