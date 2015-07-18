@@ -23,6 +23,7 @@
 #include <sched.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <sched.h>
 #include <errno.h>
 
 inline void throwException(JNIEnv *env, jobject self, int errorCode) {
@@ -56,6 +57,16 @@ JNIEXPORT jboolean JNICALL Java_xerial_jnuma_NumaNative_isAvailable
 JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_maxNode
     (JNIEnv *env, jobject obj) {
   return numa_max_node();
+}
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    currentNode
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_currentNode
+    (JNIEnv *env, jobject obj) {
+  return numa_node_of_cpu(sched_getcpu());
 }
 
 /*

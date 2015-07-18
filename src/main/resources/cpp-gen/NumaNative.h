@@ -25,6 +25,14 @@ JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_maxNode
 
 /*
  * Class:     xerial_jnuma_NumaNative
+ * Method:    currentNode
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_currentNode
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
  * Method:    nodeSize
  * Signature: (I)J
  */

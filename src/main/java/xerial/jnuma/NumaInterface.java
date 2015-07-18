@@ -22,8 +22,11 @@ public interface NumaInterface {
     // Check if NUMA aviable
     public boolean isAvailable();
 
-    // Return # of NUMA nodes
+    // Return the heightes number of NUMA node
     public int maxNode();
+
+    // Return a current node of this thread
+    public int currentNode();
 
     // Return the amount of total and free memory
     // in a given node

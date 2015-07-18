@@ -28,6 +28,7 @@ public class NumaNative implements NumaInterface {
     // The functions below are correspoinding to those in NumaNative.c
     @Override public native boolean isAvailable();
     @Override public native int maxNode();
+    @Override public native int currentNode();
     @Override public native long nodeSize(int node);
     @Override public native long freeSize(int node);
     @Override public native int distance(int node1, int node2);

@@ -16,37 +16,13 @@
 
 package xerial.jnuma;
 
-import sun.misc.Unsafe;
-
-import java.lang.reflect.Field;
-import java.nio.ByteBuffer;
+import xerial.jnuma.utils.PlatformDependent;
 
 /**
  * A stub when accessing numa API is not supported in the system.
  * @author leo
  */
 public class NoNuma implements NumaInterface {
-
-    // Reference to the Unsafe implementation
-    static final Unsafe unsafe;
-
-    static {
-        Unsafe unsafeInstance = null;
-        try {
-            if (Class.forName("sun.misc.Unsafe") == null)
-                throw new RuntimeException("sun.misc.Unsafe not found.");
-            // Fetch theUnsafe object for Oracle and OpenJDK
-            Field field = Unsafe.class.getDeclaredField("theUnsafe");
-            field.setAccessible(true);
-            unsafeInstance = (Unsafe) field.get(null);
-            if (unsafeInstance == null) {
-                throw new RuntimeException("Unsafe is unavailable.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        unsafe = unsafeInstance;
-    }
 
     @Override
     public boolean isAvailable() {
@@ -55,7 +31,12 @@ public class NoNuma implements NumaInterface {
 
     @Override
     public int maxNode() {
-        return 1;
+        return 0;
+    }
+
+    @Override
+    public int currentNode() {
+        return 0;
     }
 
     @Override
@@ -95,7 +76,7 @@ public class NoNuma implements NumaInterface {
 
     @Override
     public long allocate(long capacity) {
-        return unsafe.allocateMemory(capacity);
+        return PlatformDependent.UNSAFE.allocateMemory(capacity);
     }
 
     @Override
@@ -115,7 +96,7 @@ public class NoNuma implements NumaInterface {
 
     @Override
     public void free(long address, long capacity) {
-        unsafe.freeMemory(address);
+        PlatformDependent.UNSAFE.freeMemory(address);
     }
 
     @Override

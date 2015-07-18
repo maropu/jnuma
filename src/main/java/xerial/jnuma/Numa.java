@@ -56,6 +56,14 @@ public class Numa extends Logging {
     }
 
     /**
+     * Return a current node of this thread.
+     * @return
+     */
+    public static int currentNode() {
+        return impl.currentNode();
+    }
+
+    /**
      * Get the number of CPUs available to this machine.
      * @return
      */
@@ -139,13 +147,13 @@ public class Numa extends Logging {
     public static long allocate(long capacity) {
         return impl.allocate(capacity);
     }
-    public long allocateLocal(long capacity) {
+    public static long allocateLocal(long capacity) {
         return impl.allocateLocal(capacity);
     }
-    public long allocateOnNode(long capacity, int node) {
+    public static long allocateOnNode(long capacity, int node) {
         return impl.allocateOnNode(capacity, node);
     }
-    public long allocateInterleaved(long capacity) {
+    public static long allocateInterleaved(long capacity) {
         return impl.allocateInterleaved(capacity);
     }
 

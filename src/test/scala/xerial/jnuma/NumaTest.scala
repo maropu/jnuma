@@ -24,15 +24,13 @@ import org.scalatest.{Tag, WordSpec}
 
 import xerial.core.util.Timer
 
-trait MySpec extends WordSpec with Timer {
-  implicit def toTag(s:String) = Tag(s)
-}
-
 /**
  * @author leo
  */
-class NumaTest extends MySpec {
+class NumaTest extends WordSpec with Timer {
   import NumaTest._
+
+  implicit def toTag(s:String) = Tag(s)
 
   "Numa" should {
     "report NUMA info" taggedAs "report" in {
