@@ -18,6 +18,7 @@ install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq libnuma-dev numactl
  - numactl --hardware
+ - export LD_PRELOAD=/usr/lib/libnuma.so
 
 script: ./bin/sbt -Dloglevel=debug test
 
