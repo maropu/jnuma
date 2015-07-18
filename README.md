@@ -5,17 +5,34 @@ jnuma
 
 A Java library for accessing NUMA (Non Uniform Memory Access) API.
 
-## Building a native library
+## How to use
 
-    $ make native
+You can simply use ByteBuffer-like APIs to handle NUMA properties as follows:
 
-## Create a JAR package
+```
+// Allocate memory on a NUMA node 1, and the memory is
+// automatically collected by GC.
+NumaByteBuffer buf = new NumaByteBuffer(16, 1)
 
-    $ bin/sbt assembly
+// Access data by using ByteBuffer-like APIs
+buf.putDouble(1.2, 39L)
+buf.putLong(8, 6L)
+
+System.out.println(bb.getDouble(0)) // Print 1.2
+System.out.println(bb.getLong(8))   // Print 6
+```
+
+As you imagine, you can directly access primitive NUMA APIs through
+[a NUMA class](./src/main/java/xerial/jnuma/Numa.java).
 
 ## Limitation
 
-Currenty jnuma supports 64-bit Linux only. For the other operating systems, standard memory allocation in JVM will be used.
+Currenty jnuma supports 64-bit Linux only.
+For the other operating systems, standard memory allocation in JVM will be used.
+
+## Packaging
+
+If you create a JAR package, you type``bin/sbt assembly``.
 
 ## Requirements
 
