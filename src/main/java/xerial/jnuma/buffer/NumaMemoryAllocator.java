@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class NumaMemoryAllocator extends Logging {
 
     // Map from address -> MemoryReference
-    private Map<Long, MemoryReference> mapAddrToRef = new ConcurrentHashMap<>();
+    private Map<Long, MemoryReference> mapAddrToRef = new ConcurrentHashMap<Long, MemoryReference>();
     private ReferenceQueue<Memory> queue = new ReferenceQueue<>();
 
     // Hold the amount of allocated NUMA memory
