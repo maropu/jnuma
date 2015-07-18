@@ -29,6 +29,7 @@ public class NumaNative implements NumaInterface {
     @Override public native boolean isAvailable();
     @Override public native int maxNode();
     @Override public native int currentNode();
+    @Override public native int currentCpu();
     @Override public native long nodeSize(int node);
     @Override public native long freeSize(int node);
     @Override public native int distance(int node1, int node2);

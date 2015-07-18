@@ -40,6 +40,11 @@ public class NoNuma implements NumaInterface {
     }
 
     @Override
+    public int currentCpu() {
+        return 0;
+    }
+
+    @Override
     public long nodeSize(int node) {
         return Runtime.getRuntime().maxMemory();
     }

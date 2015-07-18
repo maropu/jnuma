@@ -33,6 +33,14 @@ JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_currentNode
 
 /*
  * Class:     xerial_jnuma_NumaNative
+ * Method:    currentCpu
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_currentCpu
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     xerial_jnuma_NumaNative
  * Method:    nodeSize
  * Signature: (I)J
  */

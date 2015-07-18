@@ -64,6 +64,14 @@ public class Numa extends Logging {
     }
 
     /**
+     * Return a current CPU of this thread.
+     * @return
+     */
+    public static int currentCpu() {
+        return impl.currentCpu();
+    }
+
+    /**
      * Get the number of CPUs available to this machine.
      * @return
      */

@@ -61,12 +61,22 @@ JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_maxNode
 
 /*
  * Class:     xerial_jnuma_NumaNative
- * Method:    currentNode
+ * Method:    Node
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_currentNode
     (JNIEnv *env, jobject obj) {
   return numa_node_of_cpu(sched_getcpu());
+}
+
+/*
+ * Class:     xerial_jnuma_NumaNative
+ * Method:    currentCpu
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_xerial_jnuma_NumaNative_currentCpu
+    (JNIEnv *env, jobject obj) {
+  return sched_getcpu();
 }
 
 /*

@@ -25,8 +25,9 @@ public interface NumaInterface {
     // Return the heightes number of NUMA node
     public int maxNode();
 
-    // Return a current node of this thread
+    // Return a current node/cpu of this thread
     public int currentNode();
+    public int currentCpu();
 
     // Return the amount of total and free memory
     // in a given node
