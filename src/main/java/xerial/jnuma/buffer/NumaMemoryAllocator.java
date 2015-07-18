@@ -29,7 +29,7 @@ public class NumaMemoryAllocator extends Logging {
 
     // Map from address -> MemoryReference
     private Map<Long, MemoryReference> mapAddrToRef = new ConcurrentHashMap<Long, MemoryReference>();
-    private ReferenceQueue<Memory> queue = new ReferenceQueue<>();
+    private ReferenceQueue<Memory> queue = new ReferenceQueue<Memory>();
 
     // Hold the amount of allocated NUMA memory
     private AtomicLong[] numaAllocatedSize = new AtomicLong[Numa.numNodes()];

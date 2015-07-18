@@ -260,10 +260,7 @@ JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_setPreferred
  */
 JNIEXPORT void JNICALL Java_xerial_jnuma_NumaNative_runOnNode
     (JNIEnv *env, jobject obj, jint node) {
-  int ret = numa_run_on_node((int) node);
-  if(ret != 0) {
-    throwException(env, obj, errno);
-  }
+  numa_run_on_node((int) node);
 }
 
 /*
