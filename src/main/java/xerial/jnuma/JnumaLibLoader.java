@@ -59,6 +59,9 @@ public class JnumaLibLoader extends Logging {
 
   static boolean tryLoad(String name) {
     try {
+      // Why does System.load() seem not to work?
+      // Loading libnuma though, the native cade throws an error:
+      // 'java: symbol lookup error: libjnuma.so: undefined symbol: numa_available'
       System.load(name);
     } catch (Throwable e) {
       return false;

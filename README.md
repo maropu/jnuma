@@ -15,10 +15,10 @@ You can simply use ByteBuffer-like APIs to handle NUMA properties as follows:
 NumaByteBuffer buf = new NumaByteBuffer(16, 1)
 
 // Access data by using ByteBuffer-like APIs
-buf.putDouble(1.2, 39L)
+buf.putDouble(1.3, 39L)
 buf.putLong(8, 6L)
 
-System.out.println(bb.getDouble(0)) // Print 1.2
+System.out.println(bb.getDouble(0)) // Print 1.3
 System.out.println(bb.getLong(8))   // Print 6
 ```
 
