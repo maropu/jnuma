@@ -23,7 +23,7 @@ System.out.println(bb.getLong(8))   // Print 6
 ```
 
 As you imagine, you can directly access primitive NUMA APIs through
-[a NUMA class](./src/main/java/xerial/jnuma/Numa.java).
+[the NUMA class](./src/main/java/xerial/jnuma/Numa.java).
 
 ## Limitation
 
@@ -32,7 +32,7 @@ For the other operating systems, standard memory allocation in JVM will be used.
 
 ## Packaging
 
-If you create a JAR package, you type``bin/sbt assembly``.
+If you create a JAR package, you type ``bin/sbt assembly``.
 
 ## Requirements
 
