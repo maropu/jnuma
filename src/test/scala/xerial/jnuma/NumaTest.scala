@@ -88,6 +88,7 @@ class NumaTest extends MySpec {
         boundTo(cpu) {
           write {
             // assert(cpu === Numa.currentCpu)
+            logger.info(s"preferred node:${cpu} assigned cpu:${Numa.currentCpu()}")
             new Array[Int](1024 * 1024)
           }
         }

@@ -35,7 +35,8 @@ public class Numa extends Logging {
                 logger.warning("Can't load a jnuma native library into JVM");
             }
         }
-        if (impl == null) {
+        if (impl == null || !impl.isAvailable()) {
+            logger.warning("NUMA not aviable in this platform");
             impl = new NoNuma();
         }
     }
